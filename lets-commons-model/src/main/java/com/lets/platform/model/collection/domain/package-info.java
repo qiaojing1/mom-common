@@ -1,0 +1,1 @@
+package com.lets.platform.model.collection.domain;
