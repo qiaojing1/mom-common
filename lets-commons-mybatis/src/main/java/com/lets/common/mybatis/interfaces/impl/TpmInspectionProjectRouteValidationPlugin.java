@@ -1,0 +1,67 @@
+package com.lets.common.mybatis.interfaces.impl;
+
+import cn.hutool.core.collection.CollectionUtil;
+import com.lets.common.mybatis.interfaces.ValidationPluginInterface;
+import com.lets.platform.common.pojo.exception.LetsException;
+import com.lets.platform.model.base.BaseEntity;
+import com.lets.platform.model.tpm.entity.TpmInspectionProjectRoute;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Objects;
+
+import static com.lets.common.mybatis.aspect.DeleteValidateAspect.getSingleQuotesIdStr;
+
+/**
+ * @author zhangweiyan
+ * @ClassName TpmInspectionProjectRouteValidationPlugin
+ * @Description 巡检路线引用校验
+ * @Date 2024/12/20 18:10
+ **/
+@Component
+@Slf4j
+public class TpmInspectionProjectRouteValidationPlugin implements ValidationPluginInterface {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    /**
+     * 巡检项目引用校验
+     *
+     * @param entities
+     */
+    @Override
+    public void validate(List<BaseEntity> entities) {
+        if (CollectionUtil.isNotEmpty(entities)) {
+            if (entities.get(0) instanceof TpmInspectionProjectRoute) {
+                String idStr = getSingleQuotesIdStr(entities);
+                String querySql = getQuerySql(idStr);
+                Integer data = jdbcTemplate.queryForObject(querySql, Integer.class);
+                if (Objects.nonNull(data) && data > 0) {
+                    throw new LetsException(0,
+                            "已被巡检计划引用，无法删除");
+                }
+//                data = jdbcTemplate.queryForObject(getQuerySql1(idStr), Integer.class);
+//                if (Objects.nonNull(data) && data > 0) {
+//                    throw new LetsException(0,
+//                            "已被巡检工单引用，无法删除");
+//                }
+            }
+        }
+    }
+
+
+    private static String getQuerySql(String idStr) {
+        return "select count(1) from `lets-platform-tpm`.tpm_inspection_project_route_plan_detail " +
+                "where route_id in (" + idStr + ");";
+
+    }
+
+    private static String getQuerySql1(String idStr) {
+        return "select count(1) from `lets-platform-tpm`.tpm_inspection_items_order_detail " +
+                "where inspection_items_id in (" + idStr + ");";
+
+    }
+}

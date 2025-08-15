@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lets.platform.dao.QuoteMapper">
+
+    <select id="findFieldCount" parameterType="string" resultType="integer">
+        SELECT COUNT(column_name) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = #{tableSchema} AND table_name = #{tableName} AND column_name = #{field}
+    </select>
+
+    <select id="findQuoteTimes" parameterType="string" resultType="com.lets.platform.model.psi.entity.QuoteCount">
+        select ${field} as field, count(*) as quoteTimes
+        from ${tableName}
+        where ${field} is not null and ${field} != ''
+        group by ${field}
+    </select>
+
+    <select id="findTableCount" parameterType="string" resultType="java.lang.Integer">
+        SELECT count(*) FROM information_schema.TABLES WHERE table_schema = #{tableSchema} and table_name = #{tableName}
+    </select>
+</mapper>
