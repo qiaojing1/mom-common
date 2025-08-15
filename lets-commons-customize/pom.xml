@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>lets-tpm-platform</artifactId>
+        <groupId>lets-tpm-platform</groupId>
+        <version>A3</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--定制化(针对产品之外的需求功能需要单独定制化)-->
+    <artifactId>lets-commons-customize</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>lets-tpm-platform</groupId>
+            <artifactId>lets-commons-mybatis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>lets-tpm-platform</groupId>
+            <artifactId>lets-commons-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>lets-tpm-platform</groupId>
+            <artifactId>lets-commons-client</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

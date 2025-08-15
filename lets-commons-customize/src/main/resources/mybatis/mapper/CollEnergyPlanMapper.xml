@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lets.platform.customize.service.dao.CollEnergyPlanMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lets.platform.model.collection.entity.CollEnergyPlan">
+        <result column="id" property="id" />
+        <result column="tenancy_id" property="tenancyId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="plan_date" property="planDate" />
+        <result column="regional_id" property="regionalId" />
+        <result column="regional_name" property="regionalName" />
+        <result column="energy_type" property="energyType" />
+        <result column="dosage_1" property="dosage1" />
+        <result column="amount_1" property="amount1" />
+        <result column="dosage_2" property="dosage2" />
+        <result column="amount_2" property="amount2" />
+        <result column="dosage_3" property="dosage3" />
+        <result column="amount_3" property="amount3" />
+        <result column="dosage_4" property="dosage4" />
+        <result column="amount_4" property="amount4" />
+        <result column="dosage_5" property="dosage5" />
+        <result column="amount_5" property="amount5" />
+        <result column="dosage_6" property="dosage6" />
+        <result column="amount_6" property="amount6" />
+        <result column="dosage_7" property="dosage7" />
+        <result column="amount_7" property="amount7" />
+        <result column="dosage_8" property="dosage8" />
+        <result column="amount_8" property="amount8" />
+        <result column="dosage_9" property="dosage9" />
+        <result column="amount_9" property="amount9" />
+        <result column="dosage_10" property="dosage10" />
+        <result column="amount_10" property="amount10" />
+        <result column="dosage_11" property="dosage11" />
+        <result column="amount_11" property="amount11" />
+        <result column="dosage_12" property="dosage12" />
+        <result column="amount_12" property="amount12" />
+        <result column="enable" property="enable" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        tenancy_id,
+        create_time,
+        create_user,
+        create_user_name,
+        update_time,
+        update_user,
+        update_user_name,
+        plan_date, regional_id, regional_name, energy_type, dosage_1, amount_1, dosage_2, amount_2, dosage_3, amount_3, dosage_4, amount_4, dosage_5, amount_5, dosage_6, amount_6, dosage_7, amount_7, dosage_8, amount_8, dosage_9, amount_9, dosage_10, amount_10, dosage_11, amount_11, dosage_12, amount_12, enable
+    </sql>
+
+</mapper>

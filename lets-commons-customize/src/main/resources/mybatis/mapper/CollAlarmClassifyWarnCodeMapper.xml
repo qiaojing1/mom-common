@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lets.platform.customize.service.dao.CollAlarmClassifyWarnCodeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lets.platform.model.collection.entity.CollAlarmClassifyWarnCode">
+        <result column="id" property="id" />
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="tenancy_id" property="tenancyId" />
+        <result column="parent_id" property="parentId" />
+        <result column="warn_code_id" property="warnCodeId" />
+        <result column="warn_code" property="warnCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        create_time,
+        create_user,
+        create_user_name,
+        update_time,
+        update_user,
+        update_user_name,
+        tenancy_id,
+        parent_id, warn_code_id, warn_code
+    </sql>
+
+</mapper>

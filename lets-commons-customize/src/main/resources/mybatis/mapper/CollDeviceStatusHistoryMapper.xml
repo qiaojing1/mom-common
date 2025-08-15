@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lets.platform.customize.service.dao.CollDeviceStatusHistoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="CollDeviceStatusHistory" type="com.lets.platform.model.collection.entity.CollDeviceStatusHistory" >
+        <id column="id" property="id" />
+        <result column="device_id" property="deviceId" />
+        <result column="big_status_code" property="bigStatusCode" />
+        <result column="big_status_name" property="bigStatusName" />
+        <result column="small_status_code" property="smallStatusCode" />
+        <result column="small_status_name" property="smallStatusName" />
+        <result column="old_big_status_code" property="oldBigStatusCode" />
+        <result column="old_big_status_name" property="oldBigStatusName" />
+        <result column="old_small_status_code" property="oldSmallStatusCode" />
+        <result column="old_small_status_name" property="oldSmallStatusName" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="date_time" property="dateTime" />
+        <result column="time_format" property="timeFormat" />
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="tenancy_id" property="tenancyId" />
+        <result column="data_source" property="dataSource" />
+
+        <result column="nextStartTime" property="nextStartTime"/>
+        <result column="nextEndTime" property="nextEndTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        device_id,
+        big_status_code,
+        big_status_name,
+        small_status_code,
+        small_status_name,
+        old_big_status_code,
+        old_big_status_name,
+        old_small_status_code,
+        old_small_status_name,
+        start_time,
+        end_time,
+        date_time,
+        time_format,
+        create_time,
+        create_user,
+        create_user_name,
+        update_time,
+        update_user,
+        update_user_name,
+        tenancy_id,
+        data_source
+    </sql>
+
+    <insert id="historyTimeSave" parameterType="list">
+        <foreach collection="list" item="one" separator=";" index="index">
+            insert into coll_device_status_history
+            (id,
+            device_id,
+            big_status_code,
+            big_status_name,
+            small_status_code,
+            small_status_name,
+            old_big_status_code,
+            old_big_status_name,
+            old_small_status_code,
+            old_small_status_name,
+            start_time,
+            end_time,
+            date_time,
+            time_format,
+            create_time,
+            create_user,
+            create_user_name,
+            update_time,
+            update_user,
+            update_user_name,
+            tenancy_id,
+            data_source)
+            values
+            (#{one.id},
+            #{one.deviceId},
+            #{one.bigStatusCode},
+            #{one.bigStatusName},
+            #{one.smallStatusCode},
+            #{one.smallStatusName},
+            #{one.oldBigStatusCode},
+            #{one.oldBigStatusName},
+            #{one.oldSmallStatusCode},
+            #{one.oldSmallStatusName},
+            #{one.startTime},
+            #{one.endTime},
+            #{one.dateTime},
+            #{one.timeFormat},
+            #{one.createTime},
+            #{one.createUser},
+            #{one.createUserName},
+            #{one.updateTime},
+            #{one.updateUser},
+            #{one.updateUserName},
+            #{one.tenancyId},
+            #{one.dataSource})
+            on duplicate key update
+            big_status_code = VALUES(big_status_code),
+            big_status_name = VALUES(big_status_name),
+            small_status_code = VALUES(small_status_code),
+            small_status_name = VALUES(small_status_name),
+            old_big_status_code = VALUES(old_big_status_code),
+            old_big_status_name = VALUES(old_big_status_name),
+            old_small_status_code = VALUES(old_small_status_code),
+            old_small_status_name = VALUES(old_small_status_name),
+            start_time = VALUES(start_time),
+            end_time = VALUES(end_time),
+            date_time = VALUES(date_time),
+            time_format = VALUES(time_format),
+            data_source = VALUES(data_source),
+            update_time = VALUES(update_time)
+        </foreach>
+    </insert>
+
+    <insert id="batSave" parameterType="list">
+        insert into coll_device_status_history
+        (id,
+        device_id,
+        big_status_code,
+        big_status_name,
+        small_status_code,
+        small_status_name,
+        old_big_status_code,
+        old_big_status_name,
+        old_small_status_code,
+        old_small_status_name,
+        start_time,
+        end_time,
+        date_time,
+        time_format,
+        create_time,
+        create_user,
+        create_user_name,
+        update_time,
+        update_user,
+        update_user_name,
+        tenancy_id,
+        data_source)
+        values
+        <foreach collection="list" item="one" separator=",">
+            (#{one.id},
+            #{one.deviceId},
+            #{one.bigStatusCode},
+            #{one.bigStatusName},
+            #{one.smallStatusCode},
+            #{one.smallStatusName},
+            #{one.oldBigStatusCode},
+            #{one.oldBigStatusName},
+            #{one.oldSmallStatusCode},
+            #{one.oldSmallStatusName},
+            #{one.startTime},
+            #{one.endTime},
+            #{one.dateTime},
+            #{one.timeFormat},
+            #{one.createTime},
+            #{one.createUser},
+            #{one.createUserName},
+            #{one.updateTime},
+            #{one.updateUser},
+            #{one.updateUserName},
+            #{one.tenancyId},
+            #{one.dataSource})
+        </foreach>
+    </insert>
+
+    <update id="batUpdate" parameterType="list">
+        <foreach collection="list" item="one" separator=";">
+            update coll_device_status_history
+            set
+            <if test="null != one.bigStatusCode and '' != one.bigStatusCode">big_status_code = #{one.bigStatusCode},</if>
+            <if test="null != one.bigStatusName and '' != one.bigStatusName">big_status_name = #{one.bigStatusName},</if>
+            <if test="null != one.smallStatusCode and '' != one.smallStatusCode">small_status_code = #{one.smallStatusCode},</if>
+            <if test="null != one.smallStatusName and '' != one.smallStatusCode">small_status_name = #{one.smallStatusName},</if>
+            <if test="null != one.oldBigStatusCode and '' != one.oldBigStatusCode">old_big_status_code = #{one.oldBigStatusCode},</if>
+            <if test="null != one.oldBigStatusName and '' != one.oldBigStatusName">old_big_status_name = #{one.oldBigStatusName},</if>
+            <if test="null != one.oldSmallStatusCode and '' != one.oldSmallStatusCode">old_small_status_code = #{one.oldSmallStatusCode},</if>
+            <if test="null != one.oldSmallStatusName and '' != one.oldSmallStatusName">old_small_status_name = #{one.oldSmallStatusName},</if>
+            start_time = #{one.startTime},
+            end_time = #{one.endTime},
+            date_time = #{one.dateTime},
+            time_format = #{one.timeFormat},
+            data_source = #{one.dataSource},
+            update_time = #{one.updateTime}
+            where id = #{one.id}
+        </foreach>
+    </update>
+
+    <select id="getAllHistory" resultMap="CollDeviceStatusHistory">
+        SELECT
+        id,
+        device_id,
+        big_status_code,
+        big_status_name,
+        small_status_code,
+        small_status_name,
+        old_big_status_code,
+        old_big_status_name,
+        old_small_status_code,
+        old_small_status_name,
+        start_time,
+        end_time,
+        date_time,
+        time_format,
+        create_time,
+        create_user,
+        create_user_name,
+        update_time,
+        update_user,
+        update_user_name,
+        tenancy_id,
+        data_source
+        from coll_device_status_history
+        where end_time is null
+        order by start_time
+    </select>
+
+    <select id="getAllStartLineTimeDevice" resultType="com.lets.platform.model.common.entity.CommonDevice">
+        select id as id, start_line_time as startLineTime, start_work_time as startWorkTime, tenancy_id as tenancyId
+        from common_device
+        where start_line_time is not null
+    </select>
+
+    <select id="getSpecifiedRange"
+            resultMap="CollDeviceStatusHistory" parameterType="com.lets.platform.model.collection.query.CollUsingRateQuery">
+        select
+        device_id,
+        big_status_code,
+        small_status_code,
+        start_time,
+        end_time,
+        sum(date_time) date_time,
+        time_format,
+        tenancy_id
+        from coll_device_status_history
+        where 1 = 1
+        <if test="timeType != null">
+            and time_format between #{startTime} and #{endTime}
+            <if test="today != null">
+                and time_format != #{today}
+            </if>
+        </if>
+        <if test="deviceIdList != null and deviceIdList.size != 0">
+            and device_id in
+            <foreach collection="deviceIdList" item="id" index="index" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+<!--        <if test="tenancyId != null and tenancyId != ''">-->
+<!--            and tenancy_id = #{tenancyId}-->
+<!--        </if>-->
+        group by time_format,device_id,small_status_code
+    </select>
+
+    <select id="findNotSplitData" resultMap="CollDeviceStatusHistory">
+        SELECT <include refid="Base_Column_List"/>
+        FROM coll_device_status_history
+        WHERE DATE_FORMAT(start_time, '%Y-%m-%d') != DATE_FORMAT(end_time, '%Y-%m-%d')
+        and DATE_FORMAT(end_time, '%H:%i:%s') != '00:00:00'
+        AND DATE_FORMAT(start_time, '%H:%i:%s') != '00:00:00'
+        and date_time > 0
+    </select>
+
+    <select id="findEndTimeIsNullNotNewest" resultMap="CollDeviceStatusHistory">
+        select t1.id, t1.device_id, t1.start_time, t1.end_time, t2.start_time as nextStartTime, t2.end_time as nextEndTime
+        FROM
+            (
+            SELECT id,device_id, start_time, end_time, ROW_NUMBER() OVER(ORDER BY device_id,start_time DESC) as rn FROM coll_device_status_history
+            <if test="query.startTime != null and query.startTime != '' and query.endTime != null and query.endTime != ''">
+                where start_time between #{query.startTime} and #{query.endTime}
+            </if>
+            ORDER BY device_id, start_time desc
+            ) t1
+            LEFT JOIN
+            (
+            SELECT id,device_id, start_time, end_time, ROW_NUMBER() OVER(ORDER BY device_id,start_time DESC) as rn FROM coll_device_status_history
+            <if test="query.startTime != null and query.startTime != '' and query.endTime != null and query.endTime != ''">
+                where start_time between #{query.startTime} and #{query.endTime}
+            </if>
+            ORDER BY device_id, start_time desc
+            ) t2
+            ON t1.device_id = t2.device_id and t1.rn = t2.rn + 1
+        where t1.end_time is NULL and t2.end_time is NOT NULL
+    </select>
+    <update id="updateEndTimeIsNullNotNewest" parameterType="list">
+        <foreach collection="list" item="one" separator=";">
+            update coll_device_status_history
+            set end_time = #{one.endTime},date_time = #{one.dateTime}
+            where id = #{one.id}
+        </foreach>
+    </update>
+
+    <select id="findLastLtTime" parameterType="object" resultMap="CollDeviceStatusHistory">
+        SELECT *
+        FROM (
+            SELECT *,
+            ROW_NUMBER () OVER (
+            PARTITION BY `device_id`
+            ORDER BY start_time DESC
+            ) AS rn
+            FROM coll_device_status_history
+            WHERE device_id in
+            <foreach collection="deviceIds" item="one" open="(" separator="," close=")">
+                #{one}
+            </foreach>
+            and time_format &lt; #{timeFormat}
+        ) AS t
+        WHERE t.rn = 1
+    </select>
+
+    <select id="find4FaultRepairDuration" parameterType="com.lets.platform.model.collection.dto.RepairDurationDto" resultMap="CollDeviceStatusHistory">
+        select *
+        from coll_device_status_history
+        where tenancy_id = #{query.tenancyId}
+        and time_format = #{query.dayFormat}
+        and big_status_code in
+        <foreach collection="query.typeIds" item="one" open="(" separator="," close=")">
+            #{one}
+        </foreach>
+    </select>
+
+
+    <select id="findFirstStatusByDeviceId" resultMap="CollDeviceStatusHistory">
+        WITH StatusGroups AS (
+        SELECT
+        *,
+        SUM(is_new_group) OVER (PARTITION BY device_id ORDER BY start_time) AS group_id
+        FROM (
+        SELECT
+        *,
+        -- 当前状态与前一条不同时标记新组
+        CASE WHEN small_status_code != LAG(small_status_code, 1, '') OVER (PARTITION BY device_id ORDER BY start_time)
+        THEN 1
+        ELSE 0
+        END AS is_new_group
+        FROM coll_device_status_history
+        WHERE device_id = #{deviceId}  -- 指定设备
+        ) AS t
+        ),
+        CurrentStatus AS (
+        -- 获取当前状态（end_time为NULL的记录）
+        SELECT small_status_code, group_id
+        FROM StatusGroups
+        WHERE end_time IS NULL
+        )
+        SELECT
+        MIN(start_time) AS start_time
+        FROM StatusGroups
+        WHERE group_id = (SELECT group_id FROM CurrentStatus)  -- 仅筛选当前状态的组
+        AND small_status_code = (SELECT small_status_code FROM CurrentStatus); -- 动态匹配状态码
+    </select>
+
+    <select id="queryMoreThan24Hour" resultMap="CollDeviceStatusHistory">
+        select device_id, time_format, sum(date_time) as date_time
+        from coll_device_status_history where time_format between #{start} and #{end}
+        group by time_format,device_id
+        having sum(date_time) > 86500000
+    </select>
+</mapper>

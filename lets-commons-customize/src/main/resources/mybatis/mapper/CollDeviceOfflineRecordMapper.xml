@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lets.platform.customize.service.dao.CollDeviceOfflineRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="CollDeviceOfflineRecord" type="com.lets.platform.model.collection.entity.CollDeviceOfflineRecord" >
+        <id column="id" property="id" />
+        <result column="device_id" property="deviceId" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="datetime" property="datetime" />
+        <result column="type" property="type" />
+        <result column="collector_id" property="collectorId"/>
+        <result column="collector_code" property="collectorCode" />
+        <result column="gateway_id" property="gatewayId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="tenancy_id" property="tenancyId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        create_time,
+        create_user,
+        create_user_name,
+        update_time,
+        update_user,
+        update_user_name,
+        tenancy_id,
+        device_id, start_time, end_time, datetime, `type`, collector_id, collector_code, gateway_id
+    </sql>
+
+
+    <select id="findEndTimeIsNull" resultMap="CollDeviceOfflineRecord">
+        select
+            id,
+            device_id,
+            start_time,
+            end_time,
+            datetime,
+            `type`,
+            collector_id,
+            collector_code,
+            gateway_id,
+            create_time,
+            create_user,
+            create_user_name,
+            update_time,
+            update_user,
+            update_user_name,
+            tenancy_id
+        from coll_device_offline_record
+        where end_time is null
+    </select>
+
+    <insert id="replaceBatchOffline" parameterType="list">
+        replace into coll_device_offline_record (
+        id,
+        device_id,
+        start_time,
+        end_time,
+        datetime,
+        `type`,
+        collector_id,
+        collector_code,
+        gateway_id,
+        create_time,
+        create_user,
+        create_user_name,
+        update_time,
+        update_user,
+        update_user_name,
+        tenancy_id)
+        values
+        <foreach collection ="list" item="one" index= "index" separator =",">
+            (#{one.id},
+            #{one.deviceId},
+            #{one.startTime},
+            #{one.endTime},
+            #{one.datetime},
+            #{one.type},
+            #{one.collectorId},
+            #{one.collectorCode},
+            #{one.gatewayId},
+            #{one.createTime},
+            #{one.createUser},
+            #{one.createUserName},
+            #{one.updateTime},
+            #{one.updateUser},
+            #{one.updateUserName},
+            #{one.tenancyId})
+        </foreach>
+    </insert>
+</mapper>

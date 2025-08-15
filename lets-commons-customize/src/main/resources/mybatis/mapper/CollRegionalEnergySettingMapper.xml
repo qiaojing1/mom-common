@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lets.platform.customize.service.dao.CollRegionalEnergySettingMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lets.platform.model.collection.entity.CollRegionalEnergySetting">
+        <result column="id" property="id" />
+        <result column="tenancy_id" property="tenancyId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="name" property="name" />
+        <result column="energy_type" property="energyType" />
+        <result column="content" property="content" />
+        <result column="content_chinese" property="contentChinese" />
+        <result column="device_id_list" property="deviceIdList" />
+        <result column="variable_list" property="variableList" />
+        <result column="formula_list" property="formulaList" />
+        <result column="html" property="html" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        tenancy_id,
+        create_time,
+        create_user,
+        create_user_name,
+        update_time,
+        update_user,
+        update_user_name,
+        name, energy_type, content, content_chinese, device_id_list, variable_list, formula_list, html
+    </sql>
+
+    <select id="getByIdIgnoreHtml" parameterType="string" resultMap="BaseResultMap">
+        select id, name, energy_type, content, device_id_list, variable_list, formula_list, enable
+        from coll_regional_energy_setting where id = #{id}
+    </select>
+
+    <select id="getByTenancyIdIgnoreHtml" parameterType="string" resultMap="BaseResultMap">
+        select id, name, energy_type, content, device_id_list, variable_list, formula_list, enable
+        from coll_regional_energy_setting
+        where tenancy_id = #{tenancyId}
+    </select>
+</mapper>

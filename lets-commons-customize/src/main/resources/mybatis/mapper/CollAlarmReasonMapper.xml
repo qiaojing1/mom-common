@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lets.platform.customize.service.dao.CollAlarmReasonMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lets.platform.model.collection.entity.CollAlarmReason">
+        <result column="id" property="id" />
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="tenancy_id" property="tenancyId" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="device_type_id" property="deviceTypeId" />
+        <result column="device_model_id" property="deviceModelId" />
+        <result column="device_controller_id" property="deviceControllerId" />
+        <result column="warn_reason" property="warnReason" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        create_time,
+        create_user,
+        create_user_name,
+        update_time,
+        update_user,
+        update_user_name,
+        tenancy_id,
+        code, name, device_type_id, device_model_id, device_controller_id, remark
+    </sql>
+
+</mapper>

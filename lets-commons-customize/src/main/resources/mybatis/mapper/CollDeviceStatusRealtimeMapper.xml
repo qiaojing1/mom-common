@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lets.platform.customize.service.dao.CollDeviceStatusRealtimeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lets.platform.model.collection.entity.CollDeviceStatusRealtime">
+        <id column="id" property="id" />
+        <result column="big_status_code" property="bigStatusCode" />
+        <result column="big_status_name" property="bigStatusName" />
+        <result column="small_status_code" property="smallStatusCode" />
+        <result column="small_status_name" property="smallStatusName" />
+
+        <result column="deviceId" property="deviceId"/>
+        <result column="deviceCode" property="deviceCode"/>
+        <result column="deviceName" property="deviceName"/>
+        <result column="deviceTypeId" property="deviceTypeId"/>
+        <result column="deviceModelId" property="deviceModelId"/>
+        <result column="factoryModeId" property="factoryModeId"/>
+        <result column="assetCode" property="assetCode"/>
+        <result column="assetStatus" property="assetStatus"/>
+
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="tenancy_id" property="tenancyId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_time,
+        create_user,
+        create_user_name,
+        update_time,
+        update_user,
+        update_user_name,
+        tenancy_id,
+        id, big_status_code, big_status_name, small_status_code, small_status_name
+    </sql>
+
+    <insert id="realTimeSave">
+        <foreach collection="list" item="one" separator=";" index="index">
+            insert into coll_device_status_realtime
+            (id,
+            big_status_code,
+            big_status_name,
+            small_status_code,
+            small_status_name,
+            create_time,
+            create_user,
+            create_user_name,
+            update_time,
+            update_user,
+            update_user_name,
+            tenancy_id)
+            values
+            (#{one.id},
+            #{one.bigStatusCode},
+            #{one.bigStatusName},
+            #{one.smallStatusCode},
+            #{one.smallStatusName},
+            #{one.createTime},
+            #{one.createUser},
+            #{one.createUserName},
+            #{one.updateTime},
+            #{one.updateUser},
+            #{one.updateUserName},
+            #{one.tenancyId})
+            on duplicate key update
+            big_status_code = VALUES(big_status_code),
+            big_status_name = VALUES(big_status_name),
+            small_status_code = VALUES(small_status_code),
+            small_status_name = VALUES(small_status_name),
+            update_time = VALUES(update_time),
+            update_user = VALUES(update_user),
+            update_user_name = VALUES(update_user_name)
+        </foreach>
+    </insert>
+
+    <select id="findRealtimeStatus" parameterType="string" resultType="com.lets.platform.model.collection.vo.RealtimeStatusVo">
+        select small_status_code as smallStatusCode, count(*) as number
+        from coll_device_status_realtime
+        where tenancy_id = #{tenancyId}
+        and id in
+        <foreach collection="deviceIds" item="one" open="(" separator="," close=")">
+            #{one}
+        </foreach>
+        group by small_status_code
+    </select>
+
+    <select id="findById" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+            main.id as id,
+            main.id as deviceId,
+            main.code as deviceCode,
+            main.name as deviceName,
+            main.type_id as deviceTypeId,
+            main.model_id as deviceModelId,
+            main.assets_code as assetCode,
+            main.asset_status as assetStatus,
+            main.factory_mode_id as factoryModeId,
+            cdsr.small_status_code,
+            cdsr.small_status_name,
+            cdsr.big_status_code,
+            cdsr.big_status_name,
+            cdsr.tenancy_id,
+            cdsr.create_time,
+            cdsr.create_user,
+            cdsr.create_user_name,
+            cdsr.update_time,
+            cdsr.update_user,
+            cdsr.update_user_name
+        FROM common_device main
+        LEFT JOIN coll_device_status_realtime cdsr on cdsr.id = main.id
+        WHERE main.id = #{id}
+    </select>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT
+            main.id as id,
+            main.id as deviceId,
+            main.code as deviceCode,
+            main.name as deviceName,
+            main.type_id as deviceTypeId,
+            main.model_id as deviceModelId,
+            main.assets_code as assetCode,
+            main.asset_status as assetStatus,
+            main.factory_mode_id as factoryModeId,
+            cdsr.small_status_code,
+            cdsr.small_status_name,
+            cdsr.big_status_code,
+            cdsr.big_status_name,
+            cdsr.tenancy_id,
+            cdsr.create_time,
+            cdsr.create_user,
+            cdsr.create_user_name,
+            cdsr.update_time,
+            cdsr.update_user,
+            cdsr.update_user_name
+        FROM common_device main
+        LEFT JOIN coll_device_status_realtime cdsr on cdsr.id = main.id
+        ${ew.customSqlSegment}
+    </select>
+
+    <select id="selectMaps" resultType="java.util.Map">
+        SELECT ${ew.sqlSelect}
+        FROM common_device main
+        LEFT JOIN coll_device_status_realtime cdsr on cdsr.id = main.id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

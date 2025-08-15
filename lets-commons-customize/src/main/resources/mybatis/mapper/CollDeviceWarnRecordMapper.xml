@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lets.platform.customize.service.dao.CollDeviceWarnRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lets.platform.model.collection.entity.CollDeviceWarnRecord">
+        <result column="id" property="id" />
+        <result column="factory_mode_id" property="factoryModeId" />
+        <result column="device_id" property="deviceId" />
+        <result column="warning_number" property="warningNumber" />
+        <result column="warning_content" property="warningContent" />
+        <result column="warning_reason" property="warningReason" />
+        <result column="warning_time" property="warningTime" />
+        <result column="collection_time" property="collectionTime" />
+        <result column="receiver_time" property="receiverTime" />
+        <result column="warning_end_time" property="warningEndTime" />
+        <result column="warning_continued_time" property="warningContinuedTime" />
+        <result column="status" property="status" />
+        <result column="deal_time" property="dealTime" />
+
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="tenancy_id" property="tenancyId" />
+        <result column="count" property="count" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        create_time,
+        create_user,
+        create_user_name,
+        update_time,
+        update_user,
+        update_user_name,
+        tenancy_id,
+        factory_mode_id, device_id, warning_number, warning_content, warning_reason, warning_time, collection_time, receiver_time, warning_end_time, warning_continued_time, status, deal_time
+    </sql>
+
+    <select id="getEndTimeIsNull" resultType="com.lets.platform.model.collection.entity.CollDeviceWarnRecord">
+		SELECT
+		    id as id,
+		    device_id as deviceId,
+		    factory_mode_id as factoryModeId,
+		    warning_number as warningNumber,
+		    warning_time as warningTime,
+		    warning_end_time as warningEndTime,
+		    tenancy_id as tenancyId
+		FROM coll_device_warn_record
+		where warning_end_time is null
+	</select>
+
+    <select id="findNewestByDeviceId" parameterType="string" resultMap="BaseResultMap">
+        SELECT * FROM coll_device_warn_record where warning_end_time is null and device_id = #{deviceId} order by create_time desc limit 1
+    </select>
+
+    <select id="selectAllMess" parameterType="string" resultType="com.lets.platform.model.collection.entity.CollDeviceWarnRecord">
+		SELECT
+		    lcwr.id id,
+		    lcwr.device_id deviceId,
+		    lcwr.factory_mode_id factoryModeId,
+		    lcwr.warning_number warningNumber,
+		    lcwr.warning_reason warningReason,
+		    lcwr.warning_time warningTime,
+		    lcwr.warning_end_time warningEndTime,
+		    lcwr.tenancy_id tenancyId
+		from coll_device_warn_record lcwr
+		where lcwr.warning_time &gt; #{startTime}
+		  and lcwr.status = '0' and lcwr.deal_time is null
+    </select>
+
+    <insert id="replaceBatchWarnRecord" parameterType="list">
+        replace into coll_device_warn_record (
+        id,
+        device_id,
+        factory_mode_id,
+        warning_number,
+        warning_content,
+        warning_reason,
+        warning_time,
+        collection_time,
+        receiver_time,
+        warning_end_time,
+        warning_continued_time,
+        status,
+        deal_time,
+        create_time,
+        update_time,
+        tenancy_id)
+        values
+        <foreach collection ="list" item="code" index= "index" separator =",">
+            (#{code.id},
+            #{code.deviceId},
+            #{code.factoryModeId},
+            #{code.warningNumber},
+            #{code.warningContent},
+            #{code.warningReason},
+            #{code.warningTime},
+            #{code.collectionTime},
+            #{code.receiverTime},
+            #{code.warningEndTime},
+            #{code.warningContinuedTime},
+            #{code.status},
+            #{code.dealTime},
+            #{code.createTime},
+            #{code.updateTime},
+            #{code.tenancyId})
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="com.lets.platform.model.collection.entity.CollDeviceWarnRecord">
+        update coll_device_warn_record
+        set deal_time = #{dealTime}
+        where id = #{id}
+    </update>
+    <update id="updateDealTime" parameterType="list">
+        <foreach collection="list" item="one" separator=";">
+            update coll_device_warn_record
+            set deal_time = #{one.dealTime}, update_time = #{one.updateTime}
+            where id = #{one.id}
+        </foreach>
+    </update>
+
+    <update id="batUpdateEndInfo" parameterType="list">
+        <foreach collection="list" item="one" separator=";">
+            update coll_device_warn_record
+            set
+            warning_end_time = #{one.warningEndTime},
+            warning_continued_time = #{one.warningContinuedTime},
+            status = #{one.status},
+            update_time = #{one.updateTime}
+            where id = #{one.id}
+        </foreach>
+    </update>
+    <select id="findWarnStatisticsPage" resultMap="BaseResultMap">
+        SELECT factory_mode_id,device_id,sum(warning_continued_time) warning_continued_time,
+        warning_number,count(warning_number) count
+        FROM coll_device_warn_record
+            ${ew.customSqlSegment}
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer">
+        select count(*) from coll_device_warn_record ${ew.customSqlSegment}
+    </select>
+</mapper>
